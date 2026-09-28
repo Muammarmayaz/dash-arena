@@ -688,6 +688,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50c1a03cb77e11d42926ed27f4e999ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
+  moveSpeed: 4.5
 --- !u!4 &1100248548
 Transform:
   m_ObjectHideFlags: 0
