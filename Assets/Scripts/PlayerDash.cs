@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerDash : MonoBehaviour
@@ -6,6 +7,10 @@ public class PlayerDash : MonoBehaviour
     [SerializeField] private float dashDuration = 0.15f;
     [SerializeField] private float dashCooldown = 2f;
     [SerializeField] private float iFrameExtra = 0.1f;
+
+    [Header("Dash hits")]
+    [SerializeField] private int dashDamage = 1;
+    [SerializeField] private float hitRadius = 0.6f;
 
     [Header("Feedback colours")]
     [SerializeField] private Color readyColor = Color.white;
@@ -18,6 +23,7 @@ public class PlayerDash : MonoBehaviour
     private Vector3 dashDirection;
     private float dashEndTime;
     private float nextDashTime;
+    private readonly HashSet<IDamageable> hitThisDash = new HashSet<IDamageable>();
 
     public bool IsDashing => Time.time < dashEndTime;
     public bool IsInvulnerable => Time.time < dashEndTime + iFrameExtra;
@@ -25,7 +31,7 @@ public class PlayerDash : MonoBehaviour
     void Awake()
     {
         mover = GetComponent<PlayerMover>();
-        body = GetComponentInChildren<Renderer>();   // the Capsule child
+        body = GetComponentInChildren<Renderer>();
         cam = Camera.main;
     }
 
@@ -38,7 +44,9 @@ public class PlayerDash : MonoBehaviour
 
         if (IsDashing)
         {
+            Vector3 from = transform.position;
             transform.position += dashDirection * dashSpeed * Time.deltaTime;
+            HitAlongPath(from, transform.position);
         }
         else if (!mover.enabled)
         {
@@ -54,11 +62,28 @@ public class PlayerDash : MonoBehaviour
         dashEndTime = Time.time + dashDuration;
         nextDashTime = Time.time + dashCooldown;
         mover.enabled = false;
+        hitThisDash.Clear();                 // fresh dash, nobody hit yet (bug D2)
+    }
+
+    // Checks the whole stretch moved this frame, not just where we landed (bug D1)
+    void HitAlongPath(Vector3 from, Vector3 to)
+    {
+        Vector3 lift = Vector3.up * 0.5f;    // enemy-body height, not floor level
+        Collider[] hits = Physics.OverlapCapsule(from + lift, to + lift, hitRadius,
+                                                 ~0, QueryTriggerInteraction.Collide);
+
+        foreach (Collider hit in hits)
+        {
+            // Add() returns false if this enemy was already hit this dash
+            if (hit.TryGetComponent(out IDamageable target) && hitThisDash.Add(target))
+            {
+                target.TakeDamage(dashDamage);
+            }
+        }
     }
 
     Vector3 DirectionToMouse()
     {
-        // Fire a ray from the camera through the mouse, see where it hits the player's height
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         Plane ground = new Plane(Vector3.up, transform.position);
 
@@ -68,7 +93,7 @@ public class PlayerDash : MonoBehaviour
             dir.y = 0f;
             if (dir.sqrMagnitude > 0.01f) return dir.normalized;
         }
-        return transform.forward;   // mouse right on top of you (bug D4)
+        return transform.forward;
     }
 
     void UpdateColour()
