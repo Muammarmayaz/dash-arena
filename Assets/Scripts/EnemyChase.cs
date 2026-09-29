@@ -2,38 +2,53 @@ using UnityEngine;
 
 public class EnemyChase : MonoBehaviour, IDamageable
 {
-    public Transform player;                           // drag Player in here
-    [SerializeField] private float chaseSpeed = 3.5f;   // keep below player's moveSpeed
+    [SerializeField] private float chaseSpeed = 3.5f;
+    [SerializeField] private int maxHealth = 1;
+    [SerializeField] private float stopDistance = 0f;   // 0 = chase all the way (Ranged uses ~7)
+
+    private Transform player;
+    private int currentHealth;
+    private bool isDead;
+
+    void Start()
+    {
+        currentHealth = maxHealth;
+
+        // Prefabs can't store scene references, so find the player by tag (bug E8)
+        GameObject p = GameObject.FindWithTag("Player");
+        if (p != null) player = p.transform;
+    }
 
     void Update()
     {
-        // Vector FROM enemy TO player. Reverse this order and the enemy flees instead of chasing.
-        Vector3 direction = player.position - transform.position;
+        if (player == null) return;
 
-        // Zero out y so height differences don't make the enemy drift up/down
+        Vector3 direction = player.position - transform.position;
         direction.y = 0f;
 
-        // Strip the distance, keep only the direction. Without this, the enemy
-        // speeds up when far away and slows down when close (homing-missile feel).
-        direction.Normalize();
+        if (direction.magnitude <= stopDistance) return;   // close enough, stay put
 
+        direction.Normalize();
         transform.position += direction * chaseSpeed * Time.deltaTime;
     }
 
-    // Fires when the enemy's trigger collider touches something else.
-    // Used here for "enemy touches player" -> death message.
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        // The player's collider is on the Capsule child, so check its root
+        if (other.transform.root.CompareTag("Player"))
         {
             Debug.Log("you died");
         }
     }
 
-    // The enemy's own answer to "what does taking damage mean for me?"
-    // A boss or barrel would implement this completely differently.
     public void TakeDamage(int amount)
     {
+        if (isDead) return;           // two hits in one frame won't double-kill (bug E3)
+
+        currentHealth -= amount;
+        if (currentHealth > 0) return;
+
+        isDead = true;
         Destroy(gameObject);
     }
 }

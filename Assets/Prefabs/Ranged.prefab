@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &7925848285856675889
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1133924810503004577, guid: f153bdb544779c84aae0383c93c3984e, type: 3}
+      propertyPath: m_Name
+      value: Ranged
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692918489341756956, guid: f153bdb544779c84aae0383c93c3984e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692918489341756956, guid: f153bdb544779c84aae0383c93c3984e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692918489341756956, guid: f153bdb544779c84aae0383c93c3984e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692918489341756956, guid: f153bdb544779c84aae0383c93c3984e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692918489341756956, guid: f153bdb544779c84aae0383c93c3984e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692918489341756956, guid: f153bdb544779c84aae0383c93c3984e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692918489341756956, guid: f153bdb544779c84aae0383c93c3984e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692918489341756956, guid: f153bdb544779c84aae0383c93c3984e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692918489341756956, guid: f153bdb544779c84aae0383c93c3984e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4692918489341756956, guid: f153bdb544779c84aae0383c93c3984e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6186518930533473842, guid: f153bdb544779c84aae0383c93c3984e, type: 3}
+      propertyPath: chaseSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6186518930533473842, guid: f153bdb544779c84aae0383c93c3984e, type: 3}
+      propertyPath: stopDistance
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7695011601991332843, guid: f153bdb544779c84aae0383c93c3984e, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: c28db31f3acf3da45a6611c338145e28, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1133924810503004577, guid: f153bdb544779c84aae0383c93c3984e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 747326245497078188}
+  m_SourcePrefab: {fileID: 100100000, guid: f153bdb544779c84aae0383c93c3984e, type: 3}
+--- !u!1 &7080441048184953232 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1133924810503004577, guid: f153bdb544779c84aae0383c93c3984e, type: 3}
+  m_PrefabInstance: {fileID: 7925848285856675889}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &747326245497078188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7080441048184953232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65b21399284711d4cbf6649e4446402e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyShooter
+  bulletPrefab: {fileID: 1757203265676007167, guid: de1c53aa14d9a9a4899e22796b569839, type: 3}
+  fireInterval: 2
+  range: 12
+  muzzleOffset: 0.8
