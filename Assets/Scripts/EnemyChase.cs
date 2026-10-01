@@ -5,6 +5,7 @@ public class EnemyChase : MonoBehaviour, IDamageable
     [SerializeField] private float chaseSpeed = 3.5f;
     [SerializeField] private int maxHealth = 1;
     [SerializeField] private float stopDistance = 0f;   // 0 = chase all the way (Ranged uses ~7)
+    [SerializeField] private int contactDamage = 1;
 
     private Transform player;
     private int currentHealth;
@@ -32,12 +33,19 @@ public class EnemyChase : MonoBehaviour, IDamageable
         transform.position += direction * chaseSpeed * Time.deltaTime;
     }
 
-    void OnTriggerEnter(Collider other)
+    // Stay (not Enter) so an enemy sitting on you keeps hurting you.
+    // PlayerHealth's invulnerability window stops it draining every frame (bug E2).
+    void OnTriggerStay(Collider other)
     {
+        if (isDead) return;
+
         // The player's collider is on the Capsule child, so check its root
-        if (other.transform.root.CompareTag("Player"))
+        Transform root = other.transform.root;
+        if (!root.CompareTag("Player")) return;
+
+        if (root.TryGetComponent(out IDamageable target))
         {
-            Debug.Log("you died");
+            target.TakeDamage(contactDamage);
         }
     }
 
