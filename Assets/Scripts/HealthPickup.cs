@@ -7,7 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class HealthPickup : MonoBehaviour
 {
-    [SerializeField] private int healAmount = 1;
+    [SerializeField] private int healAmount = 3;      // 3 of 10 HP (Max Health raised to 10, 3 Oct)
     [SerializeField] private float lifetime = 12f;
     [SerializeField] private float spinSpeed = 90f;     // degrees per second
     [SerializeField] private float bobHeight = 0.15f;
